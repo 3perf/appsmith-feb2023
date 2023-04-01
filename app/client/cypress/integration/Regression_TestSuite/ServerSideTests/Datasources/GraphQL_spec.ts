@@ -1,10 +1,9 @@
 import * as _ from "../../../../support/Objects/ObjectsCore";
 
-let appName: string = "",
-  datasourceName: string = "GraphQL_DS",
-  apiName: string = "GraphQL_API_";
-let tokenToAuthorizeGraphQl: string = "",
-  authoemail = "";
+let appName = "";
+let datasourceName = "GraphQL_DS";
+let tokenToAuthorizeGraphQl = "";
+let authoemail = "";
 
 const GRAPHQL_QUERY = `query ($myid: Int!) {
 	postById(id: $myid) {
@@ -39,7 +38,7 @@ const GRAPHQL_LIMIT_DATA = [
   },
 ];
 
-describe("GraphQL Datasource Implementation", function() {
+describe("GraphQL Datasource Implementation", function () {
   before(() => {
     appName = localStorage.getItem("AppName") || "";
     _.agHelper.GenerateUUID();
@@ -50,7 +49,7 @@ describe("GraphQL Datasource Implementation", function() {
     _.dataSources.CreateDataSource("UnAuthenticatedGraphQL");
   });
 
-  it("1. Should execute the API and validate the response", function() {
+  it("1. Should execute the API and validate the response", function () {
     _.apiPage.SelectPaneTab("Body");
     _.dataSources.UpdateGraphqlQueryAndVariable({
       query: GRAPHQL_QUERY,
@@ -64,7 +63,7 @@ describe("GraphQL Datasource Implementation", function() {
     _.agHelper.ActionContextMenuWithInPane("Delete");
   });
 
-  it("2. Pagination for limit based should work without offset", function() {
+  it("2. Pagination for limit based should work without offset", function () {
     /* Create an API */
     _.dataSources.CreateDataSource("UnAuthenticatedGraphQL");
     _.apiPage.SelectPaneTab("Body");
@@ -92,7 +91,7 @@ describe("GraphQL Datasource Implementation", function() {
     _.agHelper.ActionContextMenuWithInPane("Delete");
   });
 
-  it("3. Pagination for limit based should work with offset", function() {
+  it("3. Pagination for limit based should work with offset", function () {
     /* Create an API */
     _.dataSources.CreateDataSource("UnAuthenticatedGraphQL");
     _.apiPage.SelectPaneTab("Body");

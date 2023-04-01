@@ -1,19 +1,10 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { JSAction, JSCollection } from "entities/JSCollection";
+import type { ChangeEvent } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type { JSAction, JSCollection } from "entities/JSCollection";
 import CloseEditor from "components/editorComponents/CloseEditor";
 import MoreJSCollectionsMenu from "../Explorer/JSActions/MoreJSActionsMenu";
-import {
-  DropdownOnSelect,
-  SearchSnippet,
-  TabComponent,
-} from "design-system-old";
-import CodeEditor from "components/editorComponents/CodeEditor";
+import type { DropdownOnSelect } from "design-system-old";
+import { SearchSnippet, TabComponent } from "design-system-old";
 import {
   EditorModes,
   EditorSize,
@@ -29,19 +20,20 @@ import {
 } from "actions/jsPaneActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
-import { ExplorerURLParams } from "@appsmith/pages/Editor/Explorer/helpers";
+import type { ExplorerURLParams } from "@appsmith/pages/Editor/Explorer/helpers";
 import JSResponseView from "components/editorComponents/JSResponseView";
 import { isEmpty } from "lodash";
 import equal from "fast-deep-equal/es6";
 import { ENTITY_TYPE } from "entities/DataTree/dataTreeFactory";
 import { JSFunctionRun } from "./JSFunctionRun";
-import { AppState } from "@appsmith/reducers";
+import type { AppState } from "@appsmith/reducers";
 import {
   getActiveJSActionId,
   getIsExecutingJSAction,
   getJSActions,
   getJSCollectionParseErrors,
 } from "selectors/entitiesSelector";
+import type { JSActionDropdownOption } from "./utils";
 import {
   convertJSActionsToDropdownOptions,
   convertJSActionToDropdownOption,
@@ -49,7 +41,6 @@ import {
   getJSActionOption,
   getJSFunctionLineGutter,
   getJSPropertyLineFromName,
-  JSActionDropdownOption,
 } from "./utils";
 import JSFunctionSettingsView from "./JSFunctionSettings";
 import JSObjectHotKeys from "./JSObjectHotKeys";
@@ -63,7 +54,7 @@ import {
   TabbedViewContainer,
 } from "./styledComponents";
 import { getJSPaneConfigSelectedTabIndex } from "selectors/jsPaneSelectors";
-import { EventLocation } from "utils/AnalyticsUtil";
+import type { EventLocation } from "utils/AnalyticsUtil";
 import {
   hasDeleteActionPermission,
   hasExecuteActionPermission,
@@ -77,6 +68,7 @@ import {
 } from "actions/editorContextActions";
 import history from "utils/history";
 import { CursorPositionOrigin } from "reducers/uiReducers/editorContextReducer";
+import LazyCodeEditor from "components/editorComponents/LazyCodeEditor";
 
 interface JSFormProps {
   jsCollection: JSCollection;
@@ -112,9 +104,10 @@ function JSEditorForm({ jsCollection: currentJSCollection }: Props) {
     currentJSCollection,
   );
 
-  const [selectedJSActionOption, setSelectedJSActionOption] = useState<
-    JSActionDropdownOption
-  >(getJSActionOption(activeJSAction, jsActions));
+  const [selectedJSActionOption, setSelectedJSActionOption] =
+    useState<JSActionDropdownOption>(
+      getJSActionOption(activeJSAction, jsActions),
+    );
 
   const isExecutingCurrentJSAction = useSelector((state: AppState) =>
     getIsExecutingJSAction(
@@ -344,7 +337,7 @@ function JSEditorForm({ jsCollection: currentJSCollection }: Props) {
                     key: "code",
                     title: "Code",
                     panelComponent: (
-                      <CodeEditor
+                      <LazyCodeEditor
                         blockCompletions={blockCompletions}
                         className={"js-editor"}
                         customGutter={JSGutters}

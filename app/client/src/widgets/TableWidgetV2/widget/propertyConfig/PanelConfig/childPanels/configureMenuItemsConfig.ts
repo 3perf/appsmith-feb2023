@@ -1,5 +1,5 @@
 import { ValidationTypes } from "constants/WidgetValidation";
-import { AutocompleteDataType } from "utils/autocomplete/CodemirrorTernService";
+import { AutocompleteDataType } from "utils/autocomplete/AutocompleteDataType";
 import { ICON_NAMES } from "widgets/MenuButtonWidget/constants";
 import {
   booleanForEachRowValidation,
@@ -90,7 +90,8 @@ export default {
           isJSConvertible: true,
           isBindProperty: true,
           isTriggerProperty: true,
-          additionalAutoComplete: getSourceDataAndCaluclateKeysForEventAutoComplete,
+          additionalAutoComplete:
+            getSourceDataAndCaluclateKeysForEventAutoComplete,
           evaluatedDependencies: ["primaryColumns"],
         },
       ],

@@ -3,7 +3,8 @@ import * as log from "loglevel";
 import smartlookClient from "smartlook-client";
 import { getAppsmithConfigs } from "@appsmith/configs";
 import * as Sentry from "@sentry/react";
-import { ANONYMOUS_USERNAME, User } from "constants/userConstants";
+import type { User } from "constants/userConstants";
+import { ANONYMOUS_USERNAME } from "constants/userConstants";
 import { sha256 } from "js-sha256";
 
 declare global {
@@ -133,6 +134,7 @@ export type EventName =
   | "DISCORD_LINK_CLICK"
   | "INTERCOM_CLICK"
   | "BINDING_SUCCESS"
+  | "ENTITY_BINDING_SUCCESS"
   | "APP_MENU_OPTION_CLICK"
   | "SLASH_COMMAND"
   | "DEBUGGER_NEW_ERROR"
@@ -287,7 +289,9 @@ export type EventName =
   | "PEEK_OVERLAY_OPENED"
   | "PEEK_OVERLAY_COLLAPSE_EXPAND_CLICK"
   | "PEEK_OVERLAY_VALUE_COPIED"
-  | LIBRARY_EVENTS;
+  | LIBRARY_EVENTS
+  | "APP_SETTINGS_SECTION_CLICK"
+  | APP_NAVIGATION_EVENT_NAMES;
 
 export type LIBRARY_EVENTS =
   | "INSTALL_LIBRARY"
@@ -311,6 +315,13 @@ export type GAC_EVENT_NAMES =
   | "GAC_GROUP_ROLE_UPDATE"
   | "GAC_INVITE_USER_CLICK"
   | "GAC_ADD_USER_CLICK";
+
+export type APP_NAVIGATION_EVENT_NAMES =
+  | "APP_NAVIGATION_SHOW_NAV"
+  | "APP_NAVIGATION_ORIENTATION"
+  | "APP_NAVIGATION_VARIANT"
+  | "APP_NAVIGATION_BACKGROUND_COLOR"
+  | "APP_NAVIGATION_SHOW_SIGN_IN";
 
 function getApplicationId(location: Location) {
   const pathSplit = location.pathname.split("/");
@@ -364,8 +375,8 @@ class AnalyticsUtil {
               "off",
               "on",
             ];
-            analytics.factory = function(t: any) {
-              return function() {
+            analytics.factory = function (t: any) {
+              return function () {
                 const e = Array.prototype.slice.call(arguments); //eslint-disable-line prefer-rest-params
                 e.unshift(t);
                 analytics.push(e);
@@ -377,7 +388,7 @@ class AnalyticsUtil {
             const e = analytics.methods[t];
             analytics[e] = analytics.factory(e);
           }
-          analytics.load = function(t: any, e: any) {
+          analytics.load = function (t: any, e: any) {
             const n = document.createElement("script");
             n.type = "text/javascript";
             n.async = !0;
@@ -498,7 +509,7 @@ class AnalyticsUtil {
     }
 
     if (sentry.enabled) {
-      Sentry.configureScope(function(scope) {
+      Sentry.configureScope(function (scope) {
         scope.setUser({
           id: userId,
           username: userData.username,

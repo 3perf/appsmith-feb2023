@@ -1,10 +1,10 @@
-import { TextViewProps } from "../../types";
+import type { TextViewProps } from "../../types";
 import {
   ControlWrapper,
   FieldWrapper,
 } from "components/propertyControls/StyledControls";
 import { InputText } from "components/propertyControls/InputTextControl";
-import { AutocompleteDataType } from "utils/autocomplete/CodemirrorTernService";
+import { AutocompleteDataType } from "utils/autocomplete/AutocompleteDataType";
 import React from "react";
 
 export function TextView(props: TextViewProps) {

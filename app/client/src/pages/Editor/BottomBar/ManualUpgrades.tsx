@@ -1,7 +1,7 @@
 import {
   ApplicationVersion,
   updateApplication,
-} from "actions/applicationActions";
+} from "@appsmith/actions/applicationActions";
 import {
   Button,
   Category,
@@ -13,7 +13,8 @@ import {
 import { TooltipComponent, Text, TextType } from "design-system-old";
 import ModalComponent from "components/designSystems/appsmith/ModalComponent";
 import { Colors } from "constants/Colors";
-import React, { ReactNode, useState } from "react";
+import type { ReactNode } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCurrentApplicationId,
@@ -24,10 +25,14 @@ import {
 import styled from "styled-components";
 import { createMessage, CLEAN_URL_UPDATE } from "@appsmith/constants/messages";
 import { useLocation } from "react-router";
-import DisclaimerIcon from "remixicon-react/ErrorWarningLineIcon";
 import AnalyticsUtil from "utils/AnalyticsUtil";
 import classNames from "classnames";
 import { BottomBarCTAStyles } from "./styles";
+import { importRemixIcon } from "design-system-old";
+
+const DisclaimerIcon = importRemixIcon(
+  () => import("remixicon-react/ErrorWarningLineIcon"),
+);
 
 const StyledList = styled.ul`
   list-style: disc;

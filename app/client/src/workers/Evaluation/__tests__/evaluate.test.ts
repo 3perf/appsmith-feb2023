@@ -1,17 +1,14 @@
 import evaluate, { evaluateAsync } from "workers/Evaluation/evaluate";
-import {
-  DataTree,
-  DataTreeWidget,
-  ENTITY_TYPE,
-} from "entities/DataTree/dataTreeFactory";
+import type { DataTree, WidgetEntity } from "entities/DataTree/dataTreeFactory";
+import { ENTITY_TYPE } from "entities/DataTree/dataTreeFactory";
 import { RenderModes } from "constants/WidgetConstants";
 import setupEvalEnv from "../handlers/setupEvalEnv";
 import { functionDeterminer } from "../functionDeterminer";
-import { resetJSLibraries } from "workers/common/JSLibrary";
+import { resetJSLibraries } from "workers/common/JSLibrary/resetJSLibraries";
 import { EVAL_WORKER_ACTIONS } from "ce/workers/Evaluation/evalWorkerActions";
 
 describe("evaluateSync", () => {
-  const widget: DataTreeWidget = {
+  const widget: WidgetEntity = {
     bottomRow: 0,
     isLoading: false,
     leftColumn: 0,

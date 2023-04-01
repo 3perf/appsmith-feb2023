@@ -1,7 +1,4 @@
 import React, { useCallback, useMemo, useState } from "react";
-import FileAddIcon from "remixicon-react/FileAddLineIcon";
-import Database2LineIcon from "remixicon-react/Database2LineIcon";
-import Layout2LineIcon from "remixicon-react/Layout2LineIcon";
 import { Popover2 } from "@blueprintjs/popover2";
 import {
   TooltipComponent as Tooltip,
@@ -19,7 +16,7 @@ import history from "utils/history";
 import { generateTemplateFormURL } from "RouteBuilder";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { ExplorerURLParams } from "@appsmith/pages/Editor/Explorer/helpers";
+import type { ExplorerURLParams } from "@appsmith/pages/Editor/Explorer/helpers";
 import { showTemplatesModal } from "actions/templateActions";
 import { Colors } from "constants/Colors";
 import {
@@ -33,6 +30,17 @@ import {
 import HotKeys from "../Files/SubmenuHotkeys";
 import { selectFeatureFlags } from "selectors/usersSelectors";
 import AnalyticsUtil from "utils/AnalyticsUtil";
+import { importRemixIcon } from "design-system-old";
+
+const FileAddIcon = importRemixIcon(
+  () => import("remixicon-react/FileAddLineIcon"),
+);
+const Database2LineIcon = importRemixIcon(
+  () => import("remixicon-react/Database2LineIcon"),
+);
+const Layout2LineIcon = importRemixIcon(
+  () => import("remixicon-react/Layout2LineIcon"),
+);
 
 const MenuItem = styled.div<{ active: boolean }>`
   display: flex;
@@ -135,7 +143,7 @@ function AddPageContextMenu({
     onMenuItemClick(item);
   };
 
-  const onMenuItemClick = (item: typeof ContextMenuItems[number]) => {
+  const onMenuItemClick = (item: (typeof ContextMenuItems)[number]) => {
     setShow(false);
     item.onClick();
     AnalyticsUtil.logEvent("ENTITY_EXPLORER_ADD_PAGE_CLICK", {
@@ -152,7 +160,11 @@ function AddPageContextMenu({
           handleSubmitKey={handleSelect}
           handleUpKey={handleUpKey}
         >
-          <Wrapper ref={menuRef} tabIndex={0}>
+          <Wrapper
+            className={EntityClassNames.CONTEXT_MENU_CONTENT}
+            ref={menuRef}
+            tabIndex={0}
+          >
             <Text autofocus className="title" type={TextType.H5}>
               {createMessage(CANVAS_NEW_PAGE_CARD)}
             </Text>

@@ -1,9 +1,9 @@
 import { Alignment } from "@blueprintjs/core";
 import { LabelPosition } from "components/constants";
 import { ValidationTypes } from "constants/WidgetValidation";
-import { AutocompleteDataType } from "utils/autocomplete/CodemirrorTernService";
+import { AutocompleteDataType } from "utils/autocomplete/AutocompleteDataType";
 import { getResponsiveLayoutConfig } from "utils/layoutPropertiesUtils";
-import { RangeSliderWidgetProps } from "..";
+import type { RangeSliderWidgetProps } from "..";
 import {
   endValueValidation,
   maxValueValidation,

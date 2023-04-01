@@ -8,7 +8,9 @@ import { TooltipComponent as Tooltip } from "design-system-old";
 import { isEllipsisActive } from "utils/helpers";
 import { Colors } from "constants/Colors";
 import { IconWrapper } from "constants/IconConstants";
-import { ReactComponent as HelpIcon } from "assets/icons/control/help.svg";
+import { importSvg } from "design-system-old";
+
+const HelpIcon = importSvg(() => import("assets/icons/control/help.svg"));
 
 export interface LabelWithTooltipProps {
   alignment?: Alignment;
@@ -138,7 +140,8 @@ export const LabelContainer = styled.div<LabelContainerProps>`
         ? `&&& {margin-right: ${LABEL_DEFAULT_GAP}; flex-shrink: 0;} max-width: ${LABEL_MAX_WIDTH_RATE}%;`
         : `width: 100%;`
     }
-    ${position === LabelPosition.Left &&
+    ${
+      position === LabelPosition.Left &&
       `
       ${!width && `width: ${LABEL_DEFAULT_WIDTH_RATE}%`};
       ${alignment === Alignment.RIGHT && `justify-content: flex-end`};
@@ -149,7 +152,8 @@ export const LabelContainer = styled.div<LabelContainerProps>`
             : `text-align: left`
         };
       }
-    `}
+    `
+    }
     ${!inline && optionCount && optionCount > 1 && `align-self: flex-start;`}
   `}
 `;

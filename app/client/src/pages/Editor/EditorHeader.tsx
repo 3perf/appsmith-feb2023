@@ -9,17 +9,15 @@ import React, {
 import styled, { ThemeProvider } from "styled-components";
 import classNames from "classnames";
 import { Classes as Popover2Classes } from "@blueprintjs/popover2";
-import {
-  ApplicationPayload,
-  ReduxActionTypes,
-} from "@appsmith/constants/ReduxActionConstants";
+import type { ApplicationPayload } from "@appsmith/constants/ReduxActionConstants";
+import { ReduxActionTypes } from "@appsmith/constants/ReduxActionConstants";
 import { APPLICATIONS_URL } from "constants/routes";
 import AppInviteUsersForm from "pages/workspace/AppInviteUsersForm";
 import AnalyticsUtil from "utils/AnalyticsUtil";
 import { FormDialogComponent } from "components/editorComponents/form/FormDialogComponent";
 import AppsmithLogo from "assets/images/appsmith_logo_square.png";
 import { Link } from "react-router-dom";
-import { AppState } from "@appsmith/reducers";
+import type { AppState } from "@appsmith/reducers";
 import {
   getCurrentApplicationId,
   getCurrentPageId,
@@ -32,16 +30,16 @@ import {
 } from "@appsmith/selectors/workspaceSelectors";
 import { connect, useDispatch, useSelector } from "react-redux";
 import DeployLinkButtonDialog from "components/designSystems/appsmith/header/DeployLinkButton";
-import { updateApplication } from "actions/applicationActions";
+import { updateApplication } from "@appsmith/actions/applicationActions";
 import {
   getApplicationList,
   getIsSavingAppName,
   getIsErroredSavingAppName,
   showAppInviteUsersDialogSelector,
-} from "selectors/applicationSelectors";
+} from "@appsmith/selectors/applicationSelectors";
 import EditorAppName from "./EditorAppName";
 import { getCurrentUser } from "selectors/usersSelectors";
-import { User } from "constants/userConstants";
+import type { User } from "constants/userConstants";
 import {
   Category,
   EditInteractionKind,
@@ -66,7 +64,7 @@ import { EditorSaveIndicator } from "./EditorSaveIndicator";
 
 import { retryPromise } from "utils/AppsmithUtils";
 import { fetchUsersForWorkspace } from "@appsmith/actions/workspaceActions";
-import { WorkspaceUser } from "@appsmith/constants/workspaceConstants";
+import type { WorkspaceUser } from "@appsmith/constants/workspaceConstants";
 
 import { getIsGitConnected } from "selectors/gitSyncSelectors";
 import {
@@ -85,14 +83,11 @@ import {
   SHARE_BUTTON_TOOLTIP_WITH_USER,
 } from "@appsmith/constants/messages";
 import { TOOLTIP_HOVER_ON_DELAY } from "constants/AppConstants";
-import { ReactComponent as MenuIcon } from "assets/icons/header/hamburger.svg";
 import { getExplorerPinned } from "selectors/explorerSelector";
 import {
   setExplorerActiveAction,
   setExplorerPinnedAction,
 } from "actions/explorerActions";
-import { ReactComponent as UnpinIcon } from "assets/icons/ads/double-arrow-right.svg";
-import { ReactComponent as PinIcon } from "assets/icons/ads/double-arrow-left.svg";
 import { modText } from "utils/helpers";
 import Boxed from "./GuidedTour/Boxed";
 import EndTour from "./GuidedTour/EndTour";
@@ -102,6 +97,16 @@ import { useHref } from "./utils";
 import EmbedSnippetForm from "pages/Applications/EmbedSnippetTab";
 import { getAppsmithConfigs } from "@appsmith/configs";
 import { isMultiPaneActive } from "selectors/multiPaneSelectors";
+import { getIsAppSettingsPaneWithNavigationTabOpen } from "selectors/appSettingsPaneSelectors";
+import { importSvg } from "design-system-old";
+
+const MenuIcon = importSvg(() => import("assets/icons/header/hamburger.svg"));
+const UnpinIcon = importSvg(
+  () => import("assets/icons/ads/double-arrow-right.svg"),
+);
+const PinIcon = importSvg(
+  () => import("assets/icons/ads/double-arrow-left.svg"),
+);
 
 const { cloudHosting } = getAppsmithConfigs();
 
@@ -113,7 +118,7 @@ const HeaderWrapper = styled.div`
   height: ${(props) => props.theme.smallHeaderHeight};
   flex-direction: row;
   box-shadow: none;
-  border-bottom: 1px solid ${(props) => props.theme.colors.menuBorder};	
+  border-bottom: 1px solid ${(props) => props.theme.colors.menuBorder};
   & .editable-application-name {
     ${getTypographyByKey("h4")}
     color: ${(props) => props.theme.colors.header.appName};
@@ -283,6 +288,11 @@ export function EditorHeader(props: EditorHeaderProps) {
   const isPreviewMode = useSelector(previewModeSelector);
   const deployLink = useHref(viewerURL, { pageId });
   const isMultiPane = useSelector(isMultiPaneActive);
+  const isAppSettingsPaneWithNavigationTabOpen = useSelector(
+    getIsAppSettingsPaneWithNavigationTabOpen,
+  );
+  const isPreviewingApp =
+    isPreviewMode || isAppSettingsPaneWithNavigationTabOpen;
 
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
 
@@ -374,9 +384,10 @@ export function EditorHeader(props: EditorHeaderProps) {
           {!isMultiPane && (
             <HamburgerContainer
               className={classNames({
-                "relative flex items-center justify-center p-0 text-gray-800 transition-all transform duration-400": true,
-                "-translate-x-full opacity-0": isPreviewMode,
-                "translate-x-0 opacity-100": !isPreviewMode,
+                "relative flex items-center justify-center p-0 text-gray-800 transition-all transform duration-400":
+                  true,
+                "-translate-x-full opacity-0": isPreviewingApp,
+                "translate-x-0 opacity-100": !isPreviewingApp,
               })}
             >
               <TooltipComponent

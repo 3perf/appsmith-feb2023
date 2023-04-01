@@ -91,12 +91,16 @@ jobs:
             yarn build
           ls -l build
 
+      - name: Pack the client build directory
+        run: |
+          tar -cvf ./build.tar -C build .
+
       # Upload the build artifact so that it can be used by the test & deploy job in the workflow
       - name: Upload react build bundle
         uses: actions/upload-artifact@v3
         with:
           name: client-build
-          path: app/client/build/
+          path: app/client/build.tar
 
   server-build:
     needs:
@@ -294,23 +298,3 @@ jobs:
             APPSMITH_SEGMENT_CE_KEY=${{ secrets.APPSMITH_SEGMENT_CE_KEY }}
           tags: |
             ${{ secrets.DOCKER_HUB_ORGANIZATION }}/appsmith-server:latest
-
-      - name: Build and push RTS image
-        uses: depot/build-push-action@v1
-        with:
-          context: app/rts
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_HUB_ORGANIZATION }}/appsmith-rts:${{needs.prelude.outputs.tag}}
-
-      # Only build & tag with latest if the tag doesn't contain beta
-      - name: Build and push RTS image latest
-        if: needs.prelude.outputs.is_beta == 'false'
-        uses: depot/build-push-action@v1
-        with:
-          context: app/rts
-          push: true
-          build-args: |
-            APPSMITH_SEGMENT_CE_KEY=${{ secrets.APPSMITH_SEGMENT_CE_KEY }}
-          tags: |
-            ${{ secrets.DOCKER_HUB_ORGANIZATION }}/appsmith-rts:latest
